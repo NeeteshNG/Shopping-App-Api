@@ -13,3 +13,6 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+    
+CustomUser._meta.get_field('groups').remote_field.related_name = 'custom_user_groups'
+CustomUser._meta.get_field('user_permissions').remote_field.related_name = 'custom_user_permissions'
