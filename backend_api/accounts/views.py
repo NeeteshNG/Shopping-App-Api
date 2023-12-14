@@ -7,6 +7,7 @@ from django.contrib.auth import authenticate
 from django.core.exceptions import ObjectDoesNotExist
 from .models import CustomUser
 from rest_framework.permissions import IsAuthenticated
+from django.contrib.auth.hashers import check_password
 
 @api_view(['POST'])
 def register_user(request):
@@ -24,7 +25,6 @@ def user_login(request):
     if request.method == 'POST':
         email = request.data.get('email')
         password = request.data.get('password')
-
         user = None
         if '@' in email:
             try:
@@ -36,8 +36,9 @@ def user_login(request):
             user = authenticate(email=email, password=password)
 
         if user:
-            token, _ = Token.objects.get_or_create(user=user)
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
+            if check_password(password, user.password):
+                token, _ = Token.objects.get_or_create(user=user)
+                return Response({'token': token.key}, status=status.HTTP_200_OK)
 
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
     
