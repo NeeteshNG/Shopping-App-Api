@@ -12,7 +12,9 @@ class UserSerializer(serializers.ModelSerializer):
         user = CustomUser(
             username = validated_data['username'],
             email = validated_data['email'],
-            phone_number=validated_data['phone_number']
+            phone_number=validated_data['phone_number'],
+            name=validated_data.get('name'), 
+            address=validated_data.get('address')
         )
         user.password = make_password(validated_data['password'])
         user.save()
