@@ -20,27 +20,27 @@ def register_user(request):
 
 
 
+from rest_framework.authtoken.models import Token
+
 @api_view(['POST'])
 def user_login(request):
     if request.method == 'POST':
         email = request.data.get('email')
         password = request.data.get('password')
         user = None
-        if '@' in email:
+        
+        if email and password:
             try:
                 user = CustomUser.objects.get(email=email)
-            except ObjectDoesNotExist:
-                pass
-
-        if not user:
-            user = authenticate(email=email, password=password)
-
-        if user:
-            if check_password(password, user.password):
+            except CustomUser.DoesNotExist:
+                return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+            
+            if user.check_password(password):
                 token, _ = Token.objects.get_or_create(user=user)
-                return Response({'token': token.key}, status=status.HTTP_200_OK)
+                return Response({'token': token.key, 'user': UserSerializer(user).data}, status=status.HTTP_200_OK)
 
         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
+
     
 
 @api_view(['POST'])
