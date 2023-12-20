@@ -14,13 +14,15 @@ def register_user(request):
     if request.method == 'POST':
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            email = serializer.validated_data['email']
+            try:
+                existing_user = CustomUser.objects.get(email=email)
+                return Response({'error': 'User with this email already exists'}, status=status.HTTP_400_BAD_REQUEST)
+            except CustomUser.DoesNotExist:
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-
-from rest_framework.authtoken.models import Token
 
 @api_view(['POST'])
 def user_login(request):

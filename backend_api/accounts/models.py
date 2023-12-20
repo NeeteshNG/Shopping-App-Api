@@ -6,6 +6,7 @@ class CustomUser(AbstractUser):
     email = models.EmailField(unique=True)
     name = models.CharField(max_length=100)
     phone_number = models.CharField(max_length=12)
+    address = models.CharField(max_length=200, blank=True, null=True)
 
     def __str__(self):
         return self.username
