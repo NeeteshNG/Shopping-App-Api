@@ -5,7 +5,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     description = models.TextField()
     shipping_details = models.CharField(max_length=100)
-    images = models.JSONField()
+    images = models.ImageField()
     category = models.CharField(max_length=50)
     stock = models.IntegerField(default=0)
 
