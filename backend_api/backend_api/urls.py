@@ -6,6 +6,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('accounts.urls')),
     path('productsApi/', include('products.urls')),
+    path('cartApi/', include('cart.urls')),
+    path('wishlistApi/', include('wishlist.urls')),
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
