@@ -21,6 +21,7 @@ class AddToCartView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         user = request.user
         product_id = request.data.get('product')
+        set_quantity = request.data.get('quantity')
         
         if not product_id:
             return Response({'error': 'productId is required'}, status=status.HTTP_400_BAD_REQUEST)
@@ -37,7 +38,7 @@ class AddToCartView(generics.CreateAPIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             else:
                 # If the item does not exist, create a new cart item with quantity=1
-                cart_item = CartItem.objects.create(user=user, product_id=product_id, quantity=1)
+                cart_item = CartItem.objects.create(user=user, product_id=product_id, quantity=set_quantity)
                 serializer = CartItemSerializer(cart_item)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
