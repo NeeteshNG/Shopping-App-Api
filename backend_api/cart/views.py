@@ -32,7 +32,7 @@ class AddToCartView(generics.CreateAPIView):
             
             if cart_item:
                 # If the item exists, increment the quantity
-                cart_item.quantity += 1
+                cart_item.quantity += set_quantity
                 cart_item.save()
                 serializer = CartItemSerializer(cart_item)
                 return Response(serializer.data, status=status.HTTP_200_OK)
