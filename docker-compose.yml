@@ -1,0 +1,35 @@
+services:
+  backend:
+    build:
+      context: ./backend_api
+      dockerfile: Dockerfile
+    container_name: shopping-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DEBUG=${DEBUG:-True}
+      - SECRET_KEY=${SECRET_KEY:-django-insecure-change-me-in-production}
+      - ALLOWED_HOSTS=${ALLOWED_HOSTS:-*}
+      - EMAIL_HOST_USER=${EMAIL_HOST_USER:-}
+      - EMAIL_HOST_PASSWORD=${EMAIL_HOST_PASSWORD:-}
+    volumes:
+      - ./backend_api/db.sqlite3:/app/db.sqlite3
+      - ./backend_api/media:/app/media
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      args:
+        - REACT_APP_API_URL=${REACT_APP_API_URL:-}
+    container_name: shopping-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+networks:
+  default:
+    name: shopping-network
