@@ -2,6 +2,11 @@
 
 A complete e-commerce application with React frontend and Django REST Framework backend. Features user authentication, product catalog, shopping cart, and wishlist functionality.
 
+## Live Demo
+
+- **Frontend**: https://shopping-app-api-xi.vercel.app/
+- **Backend API**: https://shopping-app-api-production.up.railway.app/
+
 ## Quick Start with Docker
 
 ```bash
